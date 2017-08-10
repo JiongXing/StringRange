@@ -1,0 +1,2 @@
+# StringRangeDemo
+Swift字符串查找所有子串及Range转换成NSRange
