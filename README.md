@@ -3,7 +3,7 @@ Swift字符串查找所有子串及Range转换成NSRange
 
 # 从Swift字符串中查找给定子串的所有Range
 
-核心方法是：
+使用到一个关键的方法：
 
 ```swift
 range(of: string, options: , range: , locale: )
