@@ -1,8 +1,6 @@
 # StringRangeDemo
 Swift字符串查找所有子串及Range转换成NSRange
 
-# 从Swift字符串中查找给定子串的所有Range
-
 使用到一个关键的方法：
 
 ```swift
@@ -10,6 +8,7 @@ range(of: string, options: , range: , locale: )
 ```
 
 这个方法在给定给定范围内查找子串，并在查到第一个子串时返回Range类型的结果。
+
 如此一来，我们只需要不断改变查找范围，把每一次查找得到的Range都记录下来，最终就能得到所有Range。
 
 1、初始化时先设置查找范围为整个字符串
@@ -42,6 +41,7 @@ extension String {
 
 # 把Range转换成NSRange
 
+## Swift3的转换方法：
 OC常用的NSRange不依赖于任何类型，独立成型，要创建一个NSRange只需要给出区间起始点，以及区间长度即可，而这两个值都是整型。
 
 ```objc
@@ -57,6 +57,22 @@ extension String {
         let from = String.UTF16View.Index(range.lowerBound, within: utf16view)
         let to = String.UTF16View.Index(range.upperBound, within: utf16view)
         return NSMakeRange(utf16view.startIndex.distance(to: from), from.distance(to: to))
+    }
+}
+```
+
+## Swift4的转换方法：
+苹果在Swift4对字符串作了很大改动，字符串变回了集合类型，相应地其很多api都发生了变化，这是题外话了...
+在Swift4，苹果增加了api直接支持把Range转换成NSRange，它是NSRange的构造方法：
+```swift
+NSRange(range, in: string)
+```
+给构造方法传入range以及这个range相应的string即可。
+所以到了Swift4，把方法重构一下，只需要一行代码：
+```swift
+extension String {
+    func nsrange(fromRange range : Range<String.Index>) -> NSRange {
+        return NSRange(range, in: self)
     }
 }
 ```
@@ -85,4 +101,6 @@ print("------ nsranges of 😊 :\(nsranges.count) ------")
 dump(nsranges)
 ```
 
-![运行结果.png](http://upload-images.jianshu.io/upload_images/2419179-7c1340f1cb5824de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![swift3运行结果](http://upload-images.jianshu.io/upload_images/2419179-7c1340f1cb5824de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![swift4的NSRange](http://upload-images.jianshu.io/upload_images/2419179-c9c32f42a755ba52.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
